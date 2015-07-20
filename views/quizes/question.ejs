@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Quiz</title>
-</head>
-<body>
-  <h2>El juego de las preguntas</h2>
-  <form method='get' action="/quizes/answer">
-    <label for="respuesta"> <%= pregunta %></label>
-    <input type="text" name="respuesta" placeholder='Responda aquí'>
-    <input type="submit">
-  </form>
-</body>
-</html>
+<form method='get' action="/quizes/answer">
+  <label for="respuesta"> <%= pregunta %></label>
+  <input type="text" name="respuesta" placeholder='Responda aquí'>
+  <input type="submit">
+</form>
