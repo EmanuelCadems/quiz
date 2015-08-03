@@ -11,17 +11,26 @@ exports.load = function(req, res, next, quizId) {
   ).catch(function(error) {next(error);});
 };
 
+
 exports.index = function(req, res) {
-  models.Quiz.findAll().then(
-    function(quizes){
-      res.render('quizes/index.ejs', { quizes: quizes });
-    }
-  ).catch(function(error) { next(error);})
+  if (req.query.search) {
+    models.Quiz.findAll({where: ["pregunta like ?", '%' + req.query.search + '%']}).then(
+      function(quizes) {
+        res.render('quizes/index.ejs', { quizes: quizes });
+      }
+      ).catch(function(error) { next(error); });
+  } else {
+    models.Quiz.findAll().then(
+      function(quizes){
+        res.render('quizes/index.ejs', { quizes: quizes });
+      }
+    ).catch(function(error) { next(error);});
+  };
 };
 
 exports.show = function(req, res) {
   res.render('quizes/show', { quiz: req.quiz });
-}
+};
 
 exports.answer = function(req, res) {
   var resultado = 'Incorrecto';
