@@ -77,3 +77,23 @@ exports.create = function(req, res) {
     .then(function(){ res.redirect('/quizes')})
   }
 };
+
+exports.edit = function(req, res) {
+  var quiz = req.quiz;
+  res.render('quizes/edit', {quiz: quiz, errors: []})
+}
+
+exports.update = function(req, res) {
+  req.quiz.pregunta = req.body.quiz.pregunta;
+  req.quiz.respuesta = req.body.quiz.respuesta;
+
+  var errors = req.quiz.validate()
+
+  if (errors) {
+    res.render('quizes/edit', {quiz: res.quiz, errors: errors});
+  } else {
+    req.quiz.save( {fields: ['pregunta', 'respuesta']})
+    .then(function(){ res.redirect('/quizes');});
+  }
+
+}
