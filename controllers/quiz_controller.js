@@ -1,7 +1,10 @@
 var models = require('../models/models.js')
 
 exports.load = function(req, res, next, quizId) {
-  models.Quiz.find(quizId).then(
+  models.Quiz.find({
+    where: { id: Number(quizId) },
+    include: [{ model: models.Comment }]
+  }).then(
     function(quiz) {
       if (quiz) {
         req.quiz = quiz;
@@ -29,6 +32,8 @@ exports.index = function(req, res) {
 };
 
 exports.show = function(req, res) {
+  console.log('====== req.quiz.comments' + req.quiz.comments);
+  console.log(JSON.stringify(req.quiz.comments, null, 4));
   res.render('quizes/show', { quiz: req.quiz, errors: [] });
 };
 
