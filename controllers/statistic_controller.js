@@ -1,18 +1,10 @@
 var models = require('../models/models.js');
 
-// exports.get_totals = function(req, res, next) {
-//   models.Quiz.count().then(function(quiz_count) {
-//     console.log('======= quiz_count' + quiz_count.toString());
-//     var total_quizes = quiz_count;
-//     req.total_quizes = quiz;
-//     next();
-//   }).catch(function(error) {next(error);});
-// };
-
-
 exports.statistic = function(req, res) {
   var commented_quizes = 0;
   var no_commented     = 0;
+  var average          = 0;
+
   Promise.all(
     [
       models.Quiz.count(),
@@ -32,10 +24,17 @@ exports.statistic = function(req, res) {
             no_commented++;
         }
       };
+
+      if (results[0] !== 0) {
+        average = results[1] / results[0]
+      };
+
       res.render('statistics/statistic.ejs', {
           total_quizes: results[0],
           total_comments: results[1],
-          question_with_comments: commented_quizes, //results[2].rows.length,
+          average: average,
+          commented_quizes: commented_quizes, //results[2].rows.length,
+          no_commented: no_commented,
           errors: []});
     });
 }

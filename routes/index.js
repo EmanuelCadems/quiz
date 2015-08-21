@@ -29,7 +29,7 @@ router.post('/quizes',                   sessionController.loginRequired, quizCo
 router.get('/quizes/:quizId(\\d+)/edit', sessionController.loginRequired, quizController.edit);
 router.put('/quizes/:quizId(\\d+)',      sessionController.loginRequired, quizController.update);
 router.delete('/quizes/:quizId(\\d+)',   sessionController.loginRequired, quizController.destroy);
-router.get('/statistics/statistic', statisticController.statistic)
+router.get('/quizes/statistics', statisticController.statistic)
 
 router.get('/quizes/:quizId(\\d+)/comments/new', commentController.new);
 router.post('/quizes/:quizId(\\d+)/comments', commentController.create);
