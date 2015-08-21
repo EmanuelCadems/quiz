@@ -11,30 +11,17 @@ var models = require('../models/models.js');
 
 
 exports.statistic = function(req, res) {
-  var total_comments = 0;
-
-  models.Quiz.count().then(function(quiz_count) {
-    console.log('======= quiz_count' + quiz_count.toString());
-    req.total_quizes = quiz_count;
-
-    models.Comment.count().then(function(comment_count) {
-      req.total_comments = comment_count;
-
-      models.Comment.findAndCountAll({ group: 'quizId', include: [{model: models.Quiz}] }).then(function(question_with_comments) {
-        console.log(JSON.stringify(question_with_comments, null, 4));
-        req.question_with_comments = question_with_comments.rows.length;
-        res.render('statistics/statistic.ejs', {
-          total_quizes: req.total_quizes,
-          total_comments: req.total_comments,
-          question_with_comments: req.question_with_comments,
+  Promise.all(
+    [
+      models.Quiz.count(),
+      models.Comment.count(),
+      models.Comment.findAndCountAll({ group: 'quizId', include: [{model: models.Quiz}] })
+    ]
+    ).then(function(results) {
+      res.render('statistics/statistic.ejs', {
+          total_quizes: results[0],
+          total_comments: results[1],
+          question_with_comments: results[2].rows.length,
           errors: []});
-      })
     });
-
-  });
-
-
-  // console.log('=======  antes del render === total_quizes' + req.total_quizes );
-
-
 }
